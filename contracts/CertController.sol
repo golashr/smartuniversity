@@ -1,4 +1,5 @@
-pragma solidity 0.4.23;
+//pragma solidity 0.4.23;
+pragma solidity >=0.5.0 <0.7.0;
 
 import "./Owned.sol";
 import "./Student.sol";
@@ -63,16 +64,16 @@ contract CertController is Owned {
 	  return address(cert);
   }
 
-  function isCertificateExist(address certAddress) public constant returns(bool) {
+  function isCertificateExist(address certAddress) public view returns(bool) {
      if(certificateIndex.length == 0) return false;
 	    return ((certificateIndex[certificateStructs[certAddress].index] == certAddress) && (certificateStructs[certAddress].isCertificate));
   }
 
-  function getNoOfCertificates() public constant returns (uint) {
+  function getNoOfCertificates() public view returns (uint) {
     return certificateIndex.length;
   }
 
-  function getCertificateAt(uint index) public constant returns (address) {
+  function getCertificateAt(uint index) public view returns (address) {
     if(index <= certificateIndex.length)
       return certificateIndex[index];
     else
@@ -104,16 +105,16 @@ contract CertController is Owned {
     return studAddress;
   }
 
-  function isStudentExist(address studAddress) public constant returns(bool) {
+  function isStudentExist(address studAddress) public view returns(bool) {
      if(studentIndex.length == 0) return false;
 	    return ((studentIndex[studentStructs[studAddress].index] == studAddress) && (studentStructs[studAddress].isStudent));
   }
 
-  function getNoOfStudents() public constant returns (uint) {
+  function getNoOfStudents() public view returns (uint) {
     return studentIndex.length;
   }
 
-  function getStudentAt(uint index) public constant returns (address) {
+  function getStudentAt(uint index) public view returns (address) {
     if(index <= studentIndex.length)
       return studentIndex[index];
     else
@@ -160,7 +161,7 @@ contract CertController is Owned {
   }
 
   //Another important method of verification process, whether hash of the given certificate is same as of the sent by the student!!
-  function verifyCertHash(address certAddress, bytes32 certHash) public constant returns(bool) {
+  function verifyCertHash(address certAddress, bytes32 certHash) public view returns(bool) {
     Certificate cert = Certificate(certAddress);
     return (cert.getCertHash() == certHash);
   }

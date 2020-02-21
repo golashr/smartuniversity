@@ -1,4 +1,5 @@
-pragma solidity 0.4.23;
+//pragma solidity 0.4.23;
+pragma solidity >=0.5.0 <0.7.0;
 
 import "./Certificate.sol";
 import "./Owned.sol";
@@ -28,18 +29,18 @@ contract Student is Owned{
   }
 
   //Check whether Certificate already granted
-  function isCertGranted(address certAddress) public constant returns(bool) {
+  function isCertGranted(address certAddress) public view returns(bool) {
     if(certIndex.length == 0) return false;
 	  return ((certIndex[certStructs[certAddress].index] == certAddress) && (certStructs[certAddress].isCertificateGranted));
   }
 
   //add certificate to the list if it does not exists already. With this, certificate is granted to the student
-  function grantCertificate(address _batchAddress, address certAddress, bytes32 timestamp) onlyOwner public returns(bool) {
+  function grantCertificate(address _batchAddress, address certAddress, bytes32 timestamp) public onlyOwner returns(bool) {
     if(isCertGranted(certAddress)) return true;
 
     //assign the timestamp
     Certificate cert = Certificate(certAddress);
-    cert.grantCertificate(this, timestamp);
+    cert.grantCertificate(address(this), timestamp);
 
     certStructs[certAddress].certificateAddress = certAddress;
 	  certStructs[certAddress].isCertificateGranted = true;
@@ -50,12 +51,12 @@ contract Student is Owned{
   }
 
   //get parent batch address
-  function getBatchAddress() public constant returns (address) {
+  function getBatchAddress() public view returns (address) {
   	return batchAddress;
   }
 
   //Check whether Student already exists
-  function getCertificateAt(uint index) public constant returns (address) {
+  function getCertificateAt(uint index) public view returns (address) {
   	if(index < certIndex.length)
   		return certIndex[index];
   	else
@@ -63,12 +64,12 @@ contract Student is Owned{
   }
 
   //Check whether Student already exists
-  function getNoOfCertificates() public constant returns (uint) {
+  function getNoOfCertificates() public view returns (uint) {
     return certIndex.length;
   }
 
   //Currently, there is no standard support from solidity to pass dynamic aray as input parameter! Assuming that no of certificates will not be more than 20
-  function getAllCertificate() public constant returns(address[20]) {
+  function getAllCertificate() public view returns(address[20] memory) {
      address[20] memory certificatesArray;
      for (uint index = 0; index < certIndex.length; index++) {
 		if(certStructs[certIndex[index]].isCertificateGranted) //If flag is true

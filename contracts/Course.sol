@@ -1,4 +1,5 @@
-pragma solidity 0.4.23;
+//pragma solidity 0.4.23;
+pragma solidity >=0.5.0 <0.7.0;
 
 import "./Batch.sol";
 import "./Owned.sol";
@@ -29,23 +30,23 @@ contract Course is Owned{
   }
 
   //For courseIdentifier
-  function getCourseIdentifier() public constant returns(bytes32) {
+  function getCourseIdentifier() public view returns(bytes32) {
       return courseIdentifier;
   }
 
   //For addressInstitute
-  function getInstituteAddress() public constant returns(address) {
+  function getInstituteAddress() public view returns(address) {
       return addressInstitute;
   }
 
   //Check whether Batch already exists
-  function isBatchExist(address batchAddress) public constant returns(bool) {
+  function isBatchExist(address batchAddress) public view returns(bool) {
     if(batchIndex.length == 0) return false;
 	    return ((batchIndex[batchStructs[batchAddress].index] == batchAddress) && (batchStructs[batchAddress].isBatch));
   }
 
   //add the new batch to the list, if it does not exists already
-  function addBatch(address batchAddress) onlyOwner public returns(uint) {
+  function addBatch(address batchAddress) public onlyOwner returns(uint) {
     if(isBatchExist(batchAddress)) return uint(9999); //9999 is merely a number sent to the callee, signifying the given batch of the course already exists
     batchStructs[batchAddress].batchData = batchAddress;
 	  batchStructs[batchAddress].isBatch = true;
@@ -55,12 +56,12 @@ contract Course is Owned{
   }
 
   //Get the number of batches under the course
-  function getNoOfBatches() public constant returns (uint) {
+  function getNoOfBatches() public view returns (uint) {
     return batchIndex.length;
   }
 
   //Get the batch address against the index
-  function getBatchAt(uint index) public constant returns (address) {
+  function getBatchAt(uint index) public view returns (address) {
   	if(index < batchIndex.length)
   		return batchIndex[index];
   	else
@@ -68,7 +69,7 @@ contract Course is Owned{
   }
 
   //Currently, there is no standard support from solidity to pass dynamic aray as input parameter! Assuming that no of batches will not be more than 20
-  function getAllBatches() public constant returns(address[20]) {
+  function getAllBatches() public view returns(address[20] memory) {
     address[20] memory batchesArray;
     for (uint index = 0; index < batchIndex.length; index++) {
     if(batchStructs[batchIndex[index]].isBatch) //If flag is true

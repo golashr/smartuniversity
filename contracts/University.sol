@@ -1,4 +1,5 @@
-pragma solidity 0.4.23;
+//pragma solidity 0.4.23;
+pragma solidity >=0.5.0 <0.7.0;
 
 import "./Owned.sol";
 
@@ -26,18 +27,18 @@ contract University is Owned{
   }
 
   //Get universityIdentifier
-  function getUnivesityIdentifier() public constant returns(bytes32) {
+  function getUnivesityIdentifier() public view returns(bytes32) {
       return universityIdentifier;
   }
 
   //Check whether Institute already exists
-  function isInstituteExist(address instituteAddress) public constant returns(bool) {
+  function isInstituteExist(address instituteAddress) public view returns(bool) {
   	if(instituteIndex.length == 0) return false;
   	return ((instituteIndex[instituteStructs[instituteAddress].index] == instituteAddress) && (instituteStructs[instituteAddress].isInstitute));
   }
 
   //Get the institute at the given index
-  function getInstituteAt(uint index) constant public returns(address) {
+  function getInstituteAt(uint index) public view returns(address) {
     if(index < instituteIndex.length)
       return instituteIndex[index];
     else
@@ -45,7 +46,7 @@ contract University is Owned{
   }
 
   //add institute to the list if it does not exists already
-  function addInstitute(address instituteAddress) onlyOwner public returns(uint) {
+  function addInstitute(address instituteAddress) public onlyOwner returns(uint) {
     if(isInstituteExist(instituteAddress)) return uint(9999); //9999 is merely a number sent to the callee, signifying the given Institute already exists
     instituteStructs[instituteAddress].instituteData = instituteAddress;
 	  instituteStructs[instituteAddress].isInstitute = true;

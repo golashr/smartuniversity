@@ -1,4 +1,5 @@
-pragma solidity 0.4.23;
+//pragma solidity 0.4.23;
+pragma solidity >=0.5.0 <0.7.0;
 
 import "./Owned.sol";
 import "./Student.sol";
@@ -52,16 +53,16 @@ contract UniController is Owned {
 	  return address(univ);
   }
 
-  function isUniExist(address uniAddress) public constant returns(bool) {
+  function isUniExist(address uniAddress) public onlyOwner view returns(bool) {
     if(univIndex.length == 0) return false;
 	   return ((univIndex[univStructs[uniAddress].index] == uniAddress) && (univStructs[uniAddress].isUniversity));
   }
 
-  function getNoOfUniversity() public constant returns (uint) {
+  function getNoOfUniversity() public view returns (uint) {
     return univIndex.length;
   }
 
-  function getUniversityAt(uint index) public constant returns (address) {
+  function getUniversityAt(uint index) public view returns (address) {
     if(index <= univIndex.length)
       return univIndex[index];
     else
@@ -105,7 +106,7 @@ contract UniController is Owned {
   }
 
   //Important method as part of verification, to check if this quadruple belongs to the same hierarchy or not!!
-  function checkHierarchy(address univAddress,address instAddress,address courseAddress,address batchAddress) public constant returns (bool) {
+  function checkHierarchy(address univAddress,address instAddress,address courseAddress,address batchAddress) public view returns (bool) {
     if(!isUniExist(univAddress)) return false;
 
   	University univ = University(univAddress);
@@ -121,7 +122,7 @@ contract UniController is Owned {
   }
 
   //Another important method of verification process, whether merkel root of the associated batch, of the given certificate is same as the sent by the student!!
-  function verifyMerketRoot(address certAddress, bytes32 merkelRootHash) public constant returns(bool) {
+  function verifyMerketRoot(address certAddress, bytes32 merkelRootHash) public view returns(bool) {
     Certificate cert = Certificate(certAddress);
     address batchAddress = cert.getBatchAddress();
     Batch batch = Batch(batchAddress);

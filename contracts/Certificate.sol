@@ -1,4 +1,5 @@
-pragma solidity 0.4.23;
+//pragma solidity 0.4.23;
+pragma solidity >=0.5.0 <0.7.0;
 
 import "./Owned.sol";
 
@@ -27,40 +28,40 @@ contract Certificate is Owned{
   }
 
   //For CertIdentifier
-  function getCertIdentifier() public constant returns(bytes32) {
+  function getCertIdentifier() public view returns(bytes32) {
       return certIdentifier;
   }
 
   //For Revocation
-  function isRevoked() public constant returns(bool) {
+  function isRevoked() public view returns(bool) {
       return isRevokedFlag;
   }
 
   //revoke the certificate, done from the DApp
-  function revokeCert() onlyOwner public returns(bool) {
+  function revokeCert() public onlyOwner returns(bool) {
       isRevokedFlag = true;
       return true;
   }
 
   //Re-invoke the certificate, done from the DApp
-  function suspendRevocation() onlyOwner public returns(bool) {
+  function suspendRevocation() public onlyOwner returns(bool) {
       isRevokedFlag = false;
       return true;
   }
 
   //For Expiry
-  function isExpired() public constant returns(bool) {
+  function isExpired() public view returns(bool) {
       return isExpiredFlag;
   }
 
   //expire the certificate, done from the DApp
-  function expireCert() onlyOwner public returns(bool) {
+  function expireCert() public onlyOwner returns(bool) {
       isExpiredFlag = true;
       return true;
   }
 
   //here, certificate is associated with a specific student
-  function grantCertificate(address studentAddress, bytes32 timestamp) onlyOwner public returns(bool) {
+  function grantCertificate(address studentAddress, bytes32 timestamp) public onlyOwner returns(bool) {
       addressStudent = studentAddress;
       issuedOn = timestamp;
       emit CertGrantedCert(true);
@@ -68,17 +69,17 @@ contract Certificate is Owned{
   }
 
   //For BatchAddress
-  function getBatchAddress() public constant returns(address) {
+  function getBatchAddress() public view returns(address) {
       return addressBatch;
   }
 
   //For student
-  function getGrantedStudent() public constant returns(address) {
+  function getGrantedStudent() public view returns(address) {
       return addressStudent;
   }
 
   //For cert Hash
-  function getCertHash() public constant returns(bytes32) {
+  function getCertHash() public view returns(bytes32) {
       return certHash;
   }
 

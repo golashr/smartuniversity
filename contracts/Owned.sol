@@ -1,7 +1,8 @@
-pragma solidity 0.4.23;
+//pragma solidity 0.4.23;
+pragma solidity >=0.5.0 <0.7.0;
 
 contract Owned {
-  address private owner;     //Address of ControllerContract
+  address payable private owner;     //Address of ControllerContract
 
   constructor() public {
      owner = msg.sender; // just set the ControllerContract
@@ -12,7 +13,7 @@ contract Owned {
   	_;
   }
 
-  function kill() onlyOwner internal {
+  function kill() internal onlyOwner {
     selfdestruct(owner);
   }
 }

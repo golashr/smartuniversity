@@ -1,4 +1,5 @@
-pragma solidity 0.4.23;
+//pragma solidity 0.4.23;
+pragma solidity >=0.5.0 <0.7.0;
 
 import "./Course.sol";
 import "./Owned.sol";
@@ -29,23 +30,23 @@ contract Institute is Owned{
   }
 
   //For addressUniversity
-  function getAddressUniversity() public constant returns(address) {
+  function getAddressUniversity() public view returns(address) {
       return addressUniversity;
   }
 
   //For courseIdentifier
-  function getInstituteIdentifier() public constant returns(bytes32) {
+  function getInstituteIdentifier() public view returns(bytes32) {
       return instituteIdentifier;
   }
 
   //Check whether Course already exists
-  function isCourseExist(address courseAddress) public constant returns(bool isIndeed) {
+  function isCourseExist(address courseAddress) public view returns(bool isIndeed) {
     if(courseIndex.length == 0) return false;
      return ((courseIndex[courseStructs[courseAddress].index] == courseAddress) && (courseStructs[courseAddress].isCourse));
   }
 
   //add the new course to the list, if it does not exists already
-  function addCourse(address courseAddress) onlyOwner public returns(uint) {
+  function addCourse(address courseAddress) public onlyOwner returns(uint) {
       if(isCourseExist(courseAddress)) return uint(9999); //9999 is merely a number sent to the callee, signifying the given course already exists
       courseStructs[courseAddress].courseAddress = courseAddress;
       courseStructs[courseAddress].isCourse = true;
@@ -55,12 +56,12 @@ contract Institute is Owned{
   }
 
   //Get the total no of courses
-  function getNoOfCourses() public constant returns (uint) {
+  function getNoOfCourses() public view returns (uint) {
     return courseIndex.length;
   }
 
   //Get the Course at the given index
-  function getCourseAt(uint index) public constant returns (address) {
+  function getCourseAt(uint index) public view returns (address) {
   	if(index < courseIndex.length)
   		return courseIndex[index];
   	else
@@ -68,7 +69,7 @@ contract Institute is Owned{
   }
 
   //Currently, there is no standard practice to pass dynamic aray as input parameter! Assuming that no of courses will not be more than 25
-  function getAllCourses() public constant returns(address[25]) {
+  function getAllCourses() public view returns(address[25] memory) {
     address[25] memory coursesArray;
     for (uint index = 0; index < courseIndex.length; index++) {
     if(courseStructs[courseIndex[index]].isCourse) //If flag is true
